@@ -50,6 +50,47 @@ const Item = ({ title, img, single }) => (
 );
 
 function Playlist() {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const getMusics = async () => {
+    try {
+     const response = await fetch('https://us-central1-musdio-6ec90.cloudfunctions.net/app/api/music/get');
+     const json = await response.json().then(data => {
+        setData(data.data)
+     })
+   } catch (error) {
+     console.error(error);
+   } finally {
+     setLoading(false);
+   }
+ }
+useEffect(() => {
+  if(data.length == 0){
+    getMusics();
+  }
+}, []);
+
+
+
+
+useEffect(() => {
+  console.log("print user: " , user)
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const renderItem = ({ item }) => <Item title={item.name} img={item.img} single={item.singer}/>;
   return (
     <LinearGradient
