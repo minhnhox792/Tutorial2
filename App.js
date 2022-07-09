@@ -52,6 +52,9 @@ const Item = ({ title, img, single }) => (
 function Playlist() {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [user, setUser] = useState([]);
+  const [isLoadingUser, setisLoadingUser] = useState(true);
+  const [songsUsers , setsongsUsers] = useState ([]);
   const getMusics = async () => {
     try {
      const response = await fetch('https://us-central1-musdio-6ec90.cloudfunctions.net/app/api/music/get');
@@ -64,32 +67,35 @@ function Playlist() {
      setLoading(false);
    }
  }
+ const getUsers = async () => {
+  try {
+   const response = await fetch('https://us-central1-musdio-6ec90.cloudfunctions.net/app/api/user/SaM1QW1nc2XwTIHAY5Cx');
+   const json = await response.json().then(data => {
+    setUser(data.data);
+ })
+ } catch (error) {
+   console.error(error);
+ } finally {
+   setisLoadingUser(false);
+ }
+}
 useEffect(() => {
   if(data.length == 0){
     getMusics();
   }
+  if(user.length == 0){
+    getUsers();
+  }
+
 }, []);
 
 
 
-
 useEffect(() => {
-  console.log("print user: " , user)
+  console.log("Print data:",data)
+  console.log("Print User",user)
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const renderItem = ({ item }) => <Item title={item.name} img={item.img} single={item.singer}/>;
   return (
@@ -108,7 +114,7 @@ useEffect(() => {
         <View style={styles.Bottom}>
           <View style={styles.Bar}>
           </View>
-          {/* <FlatList data={songsUsers} renderItem={renderItem} keyExtractor={item => item.id} />  */}
+          <FlatList data={songsUsers} renderItem={renderItem} keyExtractor={item => item.id} />  
         </View>
         <View style={styles.ToolBar}>
         </View>
