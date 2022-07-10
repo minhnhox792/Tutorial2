@@ -90,14 +90,24 @@ useEffect(() => {
 }, []);
 
 
-
 useEffect(() => {
-  console.log("Print data:",data)
-  console.log("Print User",user)
+  if(data.length != 0 && user.length != 0){
+    data.forEach((m) => {
+      user['favoriteMusics'].forEach((n) =>{ 
+        if(n == m['id']){
+          setsongsUsers(previous => {
+            const newData = [...previous, m]
+            return newData
+          })
+        }
+      });
+    });
+  }
+}, [data, user]);
 
-});
 
-  const renderItem = ({ item }) => <Item title={item.name} img={item.img} single={item.singer}/>;
+
+
   return (
     <LinearGradient
       colors={["#1565C0", "#000"]}
@@ -114,7 +124,6 @@ useEffect(() => {
         <View style={styles.Bottom}>
           <View style={styles.Bar}>
           </View>
-          <FlatList data={songsUsers} renderItem={renderItem} keyExtractor={item => item.id} />  
         </View>
         <View style={styles.ToolBar}>
         </View>
